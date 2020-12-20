@@ -6,23 +6,44 @@ void init_sx1509_1() {
   if (!io1.begin(SX1509_ADDRESS1))
   {
     Serial.println(" failed");
-    while (1) ; // If we fail to communicate, loop forever.
+    //while (1) ; // If we fail to communicate, loop forever.
+    return;
   }
   Serial.println(" done");
 
-  io1.pinMode(15, OUTPUT);
-  io1.pinMode(14, OUTPUT);
-  io1.pinMode(13, OUTPUT);
-  io1.pinMode(12, OUTPUT);
-  io1.pinMode(11, OUTPUT);
-  io1.pinMode(10, OUTPUT);
-  io1.pinMode(9, OUTPUT);
-  io1.pinMode(8, OUTPUT);
-  io1.pinMode(7, OUTPUT);
-  io1.pinMode(6, OUTPUT);
-  io1.pinMode(5, OUTPUT);
-  io1.pinMode(4, OUTPUT);
-  io1.pinMode(3, OUTPUT);
-  io1.pinMode(2, OUTPUT);
+  for (byte i = 0; i < anz_leds; i++) {
+    io1.pinMode(led_pins[i], OUTPUT);
+  }
 
 }
+
+void disp_led_all(boolean iv_status) {
+
+  int lv_status = 1;
+  if (iv_status) {
+    lv_status = 0;
+  }
+
+  for (int i = 0; i < anz_leds; i++) {
+    io1.digitalWrite(led_pins[i], lv_status);
+  }
+}
+
+void disp_led( ) {
+
+  if (btn_state[btn_diagnose] == LOW ) {
+    disp_led_all(true);
+    return;
+  }
+
+  for (int i = 0; i < anz_leds; i++) {
+    int lv_status = 1;
+    if (led_status[i]) {
+      lv_status = 0;
+    }
+
+    io1.digitalWrite(led_pins [i], lv_status);
+  }
+
+}
+

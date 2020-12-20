@@ -46,10 +46,16 @@ SX1509 io; // Create an SX1509 object to be used throughout
 
 
 // SX1509 pin definitions:
-const byte SX1509_LED_PIN = 15; // LED connected to pin 15
-// SX1509 Pins:
-const byte SX1509_BUTTON_PIN = 0; // IO 0 connected to button
 
-byte disp_pins[8] = { 10, 11, 12, 13, 14, 15, 9, 8};
+const byte anz_disp_pins = 8;
+byte disp_pins[anz_disp_pins] = { 10, 11, 12, 13, 14, 15, 9, 8};
+byte gv_disp_val;
+byte gv_disp_val_byte;
+
+const byte anz_btn = 6;
+byte btnpins[anz_btn] = { 0, 1, 2, 3, 4, 5};
+byte btn_state[anz_btn] = {};
+boolean gv_reset;
+enum btn_name { btn_system_on, btn_system_off, btn_diagnose, btn_reset, btn_full, btn_local };
 
 

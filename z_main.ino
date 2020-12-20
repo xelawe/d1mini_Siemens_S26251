@@ -1,83 +1,46 @@
 //
 void setup()
 {
-  Serial.begin(115200);
-  Serial.println(" ");
-
+  init_ser();
 
   init_sx1509();
 
   init_sx1509_1();
 
+  // Blink the LED pin -- ~x ms LOW, ~x ms HIGH:
+  io1.blink(led_pins[led_system_on], 500, 500);
 
+  delay(500);
+  wifi_init(gc_hostname);
+  Serial.println("connected to " + WiFi.SSID() + " ...yeey");
+  Serial.println( WiFi.localIP() );
+
+  init_ota_local();
 
   Serial.println("Setup done");
-  io1.digitalWrite(13, LOW);
+
+  io1.setupBlink(led_pins[led_system_on], 0, 0, 255);
+  led_status[led_system_on] = true;
+
+  init_ticker_count();
 }
 
 void loop()
 {
-  // It's blinken time!
-  // Call io.digitalWrite(<pin>, <HIGH | LOW>) to set a SX1509
-  // output pin as either 3.3V or 0V.
 
+  check_ota();
 
-  //  for (int j = 0; j < 4; j++) {
-  //    io.digitalWrite(10, !bitRead(j, 1));
-  //    io.digitalWrite(11, !bitRead(j, 0));
+  check_ticker_count();
 
-  for (int i = 0; i < 64; i++) {
-
-
-    if (buttonPressed) // If the button() ISR was executed
-    {
-      // read io.interruptSource() find out which pin generated
-      // an interrupt and clear the SX1509's interrupt output.
-      unsigned int intStatus = io.interruptSource();
-      // For debugging handiness, print the intStatus variable.
-      // Each bit in intStatus represents a single SX1509 IO.
-      Serial.println("intStatus = " + String(intStatus, BIN));
-
-      // If the bit corresponding to our button IO generated
-      // the input:
-      if (intStatus & (1 << SX1509_BUTTON_PIN))
-      {
-        Serial.println("Button pressed!"); // Print a message.
-      }
-
-
-      if (intStatus & (1 << 3))
-      {
-        Serial.println("RESET Button pressed!"); // Print a message.
-        i = 0;
-      }
-
-      buttonPressed = false; // Clear the buttonPressed flag
-    }
-
-    disp_byte(i);
-    //disp_hex(i);
-
-
-    //    io1.digitalWrite(2, !bitRead(i, 1));
-    //    io1.digitalWrite(3, !bitRead(i, 0));
-    //    io1.digitalWrite(4, !bitRead(i, 5));
-    //    io1.digitalWrite(5, !bitRead(i, 4));
-    //    io1.digitalWrite(6, !bitRead(i, 3));
-    //    io1.digitalWrite(7, !bitRead(i, 2));
-    //    io1.digitalWrite(8, !bitRead(i, 1));
-    //    io1.digitalWrite(9, !bitRead(i, 0));
-    //    io1.digitalWrite(10, !bitRead(i, 5));
-    //    io1.digitalWrite(11, !bitRead(i, 4));
-    //    io1.digitalWrite(12, !bitRead(i, 3));
-    //    io1.digitalWrite(14, !bitRead(i, 2));
-   
-    //    io1.digitalWrite(15, !bitRead(i, 0));
-
-    delay(500); // Delay half-a-second
+  check_button();
+  if (gv_reset) {
+    gv_counter = 0;
+    gv_reset = false;
   }
-  // }
 
+  gv_disp_val = gv_counter;
+  disp();
+  //disp_hex(i);
 
-
+  disp_led( );
 }
