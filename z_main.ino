@@ -17,6 +17,8 @@ void setup()
 
   init_ota_local();
 
+  init_mqtt_local();
+
   Serial.println("Setup done");
 
   io1.setupBlink(led_pins[led_system_on], 0, 0, 255);
@@ -29,6 +31,8 @@ void loop()
 {
 
   check_ota();
+
+  check_mqtt_reset( );
 
   check_ticker_count();
 
