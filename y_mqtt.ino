@@ -23,7 +23,6 @@ void pub_sens(int ldr_val) {
 }
 
 void pub_stat(int ix, int cmd) {
-
   // bei ix == 0 --> alle auf cmd setzen!
 
   if (!client.publish(mqtt_GetTopic_P(gv_ptopic, mqtt_pre_stat, gv_clientname, get_stopic_ix(ix)), get_cmd_ix(cmd), true)) {
@@ -38,12 +37,35 @@ void callback_mqtt_led_ix(char* topic, byte* payload, unsigned int length, byte 
   DebugPrint(F("Callback LED"));
   DebugPrintln(iv_ix);
 
-  if (iv_ix == 0){
-    
+  bool cmd_valid = true;
+  String message_string = "";
+
+  for (int i = 0; i < length; i++) {
+    DebugPrint((char)payload[i]);
+    //fill up the message string
+    message_string.concat((char)payload[i]);
+  }
+  DebugPrintln();
+
+  byte lv_status;
+  if (message_string.equalsIgnoreCase(F("0"))) {
+    lv_status = 0;
+  }
+  if (message_string.equalsIgnoreCase(F("1"))) {
+    lv_status = 1;
+  }
+
+  if (iv_ix == 0) {
+    for (byte i = 0; i < anz_leds; i++) {
+      led_status[i] = lv_status;
+      pub_stat(i + 1, !lv_status);
+    }
   } else {
-    led_status[iv_ix - 1] = 1;
+    led_status[iv_ix - 1] = lv_status;
+    pub_stat(iv_ix, !lv_status);
   }
 }
+
 void init_mqtt_local( ) {
 
   init_mqtt(gv_clientname);
@@ -105,48 +127,48 @@ void check_mqtt_local() {
 
 }
 
-void callback_mqtt_leds(char* topic, byte* payload, unsigned int length) {
+void callback_mqtt_leds(char* topic, byte * payload, unsigned int length) {
   callback_mqtt_led_ix(topic, payload, length, 0);
 }
-void callback_mqtt_led01(char* topic, byte* payload, unsigned int length) {
+void callback_mqtt_led01(char* topic, byte * payload, unsigned int length) {
   callback_mqtt_led_ix(topic, payload, length, 1);
 }
-void callback_mqtt_led02(char* topic, byte* payload, unsigned int length) {
+void callback_mqtt_led02(char* topic, byte * payload, unsigned int length) {
   callback_mqtt_led_ix(topic, payload, length, 2);
 }
-void callback_mqtt_led03(char* topic, byte* payload, unsigned int length) {
+void callback_mqtt_led03(char* topic, byte * payload, unsigned int length) {
   callback_mqtt_led_ix(topic, payload, length, 3);
 }
-void callback_mqtt_led04(char* topic, byte* payload, unsigned int length) {
+void callback_mqtt_led04(char* topic, byte * payload, unsigned int length) {
   callback_mqtt_led_ix(topic, payload, length, 4);
 }
-void callback_mqtt_led05(char* topic, byte* payload, unsigned int length) {
+void callback_mqtt_led05(char* topic, byte * payload, unsigned int length) {
   callback_mqtt_led_ix(topic, payload, length, 5);
 }
-void callback_mqtt_led06(char* topic, byte* payload, unsigned int length) {
+void callback_mqtt_led06(char* topic, byte * payload, unsigned int length) {
   callback_mqtt_led_ix(topic, payload, length, 6);
 }
-void callback_mqtt_led07(char* topic, byte* payload, unsigned int length) {
+void callback_mqtt_led07(char* topic, byte * payload, unsigned int length) {
   callback_mqtt_led_ix(topic, payload, length, 7);
 }
-void callback_mqtt_led08(char* topic, byte* payload, unsigned int length) {
+void callback_mqtt_led08(char* topic, byte * payload, unsigned int length) {
   callback_mqtt_led_ix(topic, payload, length, 8);
 }
-void callback_mqtt_led09(char* topic, byte* payload, unsigned int length) {
+void callback_mqtt_led09(char* topic, byte * payload, unsigned int length) {
   callback_mqtt_led_ix(topic, payload, length, 9);
 }
-void callback_mqtt_led10(char* topic, byte* payload, unsigned int length) {
+void callback_mqtt_led10(char* topic, byte * payload, unsigned int length) {
   callback_mqtt_led_ix(topic, payload, length, 10);
 }
-void callback_mqtt_led11(char* topic, byte* payload, unsigned int length) {
+void callback_mqtt_led11(char* topic, byte * payload, unsigned int length) {
   callback_mqtt_led_ix(topic, payload, length, 11);
 }
-void callback_mqtt_led12(char* topic, byte* payload, unsigned int length) {
+void callback_mqtt_led12(char* topic, byte * payload, unsigned int length) {
   callback_mqtt_led_ix(topic, payload, length, 12);
 }
-void callback_mqtt_led13(char* topic, byte* payload, unsigned int length) {
+void callback_mqtt_led13(char* topic, byte * payload, unsigned int length) {
   callback_mqtt_led_ix(topic, payload, length, 13);
 }
-void callback_mqtt_led14(char* topic, byte* payload, unsigned int length) {
+void callback_mqtt_led14(char* topic, byte * payload, unsigned int length) {
   callback_mqtt_led_ix(topic, payload, length, 14);
 }

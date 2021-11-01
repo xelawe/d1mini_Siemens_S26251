@@ -13,4 +13,3 @@ byte gv_counter;
 void init_ser(){
     cy_serial::start(__FILE__);
 }
-

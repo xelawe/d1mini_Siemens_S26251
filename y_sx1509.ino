@@ -1,6 +1,5 @@
 // Display on TIL311
 
-
 void disp() {
   if (btn_state[btn_diagnose] == LOW ) {
     disp_byte(88);
