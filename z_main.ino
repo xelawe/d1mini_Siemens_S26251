@@ -1,6 +1,6 @@
 //
 void setup()
-{
+{ 
   init_ser();
   
   Wire.begin(/*SDA*/D2,/*SCL*/D1); //(D1mini)
