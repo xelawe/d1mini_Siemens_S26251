@@ -1,6 +1,6 @@
 
 char *get_stopic_ix( int ix ) {
-  strcpy_P(gv_sbuffer, (char*)pgm_read_dword(&(gt_stopic_gw60[ix])));
+  strcpy_P(gv_sbuffer, (char*)pgm_read_dword(&(gt_stopic[ix])));
   //strcpy_P(gv_buffer, );
   return gv_sbuffer;
 }
@@ -68,7 +68,7 @@ void callback_mqtt_led_ix(char* topic, byte* payload, unsigned int length, byte 
 
 void init_mqtt_local( ) {
 
-  init_mqtt(gv_clientname);
+
 
   add_subtopic(mqtt_GetTopic_P(gv_stopic_leds, mqtt_pre_cmnd, gv_clientname, get_stopic_ix(0)), callback_mqtt_leds);
   add_subtopic(mqtt_GetTopic_P(gv_stopic_led01, mqtt_pre_cmnd, gv_clientname, get_stopic_ix(1)), callback_mqtt_led01);
@@ -85,8 +85,8 @@ void init_mqtt_local( ) {
   add_subtopic(mqtt_GetTopic_P(gv_stopic_led12, mqtt_pre_cmnd, gv_clientname, get_stopic_ix(12)), callback_mqtt_led12);
   add_subtopic(mqtt_GetTopic_P(gv_stopic_led13, mqtt_pre_cmnd, gv_clientname, get_stopic_ix(13)), callback_mqtt_led13);
   add_subtopic(mqtt_GetTopic_P(gv_stopic_led14, mqtt_pre_cmnd, gv_clientname, get_stopic_ix(14)), callback_mqtt_led14);
-
-  gv_mqtt_pup_stat = true;
+  init_mqtt(gv_clientname);
+  gv_mqtt_pub_stat = true;
 
 }
 
@@ -118,9 +118,9 @@ void pub_stat() {
 
 void check_mqtt_local() {
 
-  if (gv_mqtt_pup_stat == true && gv_mqtt_conn_ok == true) {
+  if (gv_mqtt_pub_stat == true && gv_mqtt_conn_ok == true) {
     pub_stat();
-    gv_mqtt_pup_stat = false;
+    gv_mqtt_pub_stat = false;
   }
 
   check_mqtt();

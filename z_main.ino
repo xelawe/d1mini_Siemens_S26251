@@ -2,7 +2,8 @@
 void setup()
 {
   init_ser();
-
+  
+  Wire.begin(/*SDA*/D2,/*SCL*/D1); //(D1mini)
   init_sx1509();
 
   init_sx1509_1();

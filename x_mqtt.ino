@@ -33,7 +33,7 @@ const char gc_stopic_led12[] PROGMEM = "LED12";
 const char gc_stopic_led13[] PROGMEM = "LED13";
 const char gc_stopic_led14[] PROGMEM = "LED14";
 
-const char* const gt_stopic_gw60[] PROGMEM = { gc_stopic_leds, gc_stopic_led01, gc_stopic_led02, gc_stopic_led03, gc_stopic_led04, gc_stopic_led05
+const char* const gt_stopic[] PROGMEM = { gc_stopic_leds, gc_stopic_led01, gc_stopic_led02, gc_stopic_led03, gc_stopic_led04, gc_stopic_led05
                                                , gc_stopic_led06, gc_stopic_led07, gc_stopic_led08, gc_stopic_led09, gc_stopic_led10, gc_stopic_led11
                                                , gc_stopic_led12, gc_stopic_led13, gc_stopic_led14};
 char gv_sbuffer[16];// buffer for reading the string to (needs to be large enough to take the longest string
@@ -46,4 +46,4 @@ const char gc_cmd_off[] PROGMEM = "0";
 
 const char* const gt_cmd[] PROGMEM = { gc_cmd_on, gc_cmd_off };
 
-boolean gv_mqtt_pup_stat;
+boolean gv_mqtt_pub_stat;
