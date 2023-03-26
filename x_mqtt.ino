@@ -1,4 +1,4 @@
-#include "cy_mqtt_v1.h"
+#include "cy_mqtt_v2.h"
 #include <ArduinoJson.h>
 
 char gv_stopic_leds[MQTT_TOPSZ];
@@ -47,3 +47,12 @@ const char gc_cmd_off[] PROGMEM = "0";
 const char* const gt_cmd[] PROGMEM = { gc_cmd_on, gc_cmd_off };
 
 boolean gv_mqtt_pub_stat;
+
+time_t gv_timestamp_mqtt;
+time_t gv_timestamp_mqtt_local;
+boolean gv_timestamp_mqtt_ok = false;
+
+time_t gv_timestamp_clock_mqtt;
+boolean gv_timestamp_clock_mqtt_ok = false;
+
+const char* mqtt_subtopic_timestamp = "ATSH28/DATE/timestamp";

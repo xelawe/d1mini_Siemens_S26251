@@ -11,16 +11,16 @@ char *get_cmd_ix( int ix ) {
   return gv_pbuffer;
 }
 
-void pub_sens(int ldr_val) {
-  char lv_ibuffer[10];
-  //itoa(ldr_val, lv_ibuffer, 4);
-  sprintf_P(lv_ibuffer, (PGM_P)F("%5d"), ldr_val);
-  if (!client.publish(mqtt_GetTopic_P(gv_ptopic, mqtt_pre_tele, gv_clientname, (PGM_P)F("LDR")), lv_ibuffer, true)) {
-    DebugPrintln(F("pub failed!"));
-  } else {
-    DebugPrintln(F("pub ok!"));
-  }
-}
+//void pub_sens(int ldr_val) {
+//  char lv_ibuffer[10];
+//  //itoa(ldr_val, lv_ibuffer, 4);
+//  sprintf_P(lv_ibuffer, (PGM_P)F("%5d"), ldr_val);
+//  if (!client.publish(mqtt_GetTopic_P(gv_ptopic, mqtt_pre_tele, gv_clientname, (PGM_P)F("LDR")), lv_ibuffer, true)) {
+//    DebugPrintln(F("pub failed!"));
+//  } else {
+//    DebugPrintln(F("pub ok!"));
+//  }
+//}
 
 void pub_stat(int ix, int cmd) {
   // bei ix == 0 --> alle auf cmd setzen!
@@ -66,26 +66,37 @@ void callback_mqtt_led_ix(char* topic, byte* payload, unsigned int length, byte 
   }
 }
 
+void callback_mqtt_time(char* topic, byte* payload, unsigned int length) {
+  DebugPrintln("Callback Time");
+
+  gv_timestamp_mqtt = payload_to_time_t( payload, length);
+  gv_timestamp_mqtt_local =  myTZ.toLocal(gv_timestamp_mqtt, &tcr);
+  gv_timestamp_mqtt_ok = true;
+
+}
+
 void init_mqtt_local( ) {
 
+//  add_subtopic(mqtt_GetTopic_P(gv_stopic_leds, mqtt_pre_cmnd, gv_clientname, get_stopic_ix(0)), callback_mqtt_leds);
+//  add_subtopic(mqtt_GetTopic_P(gv_stopic_led01, mqtt_pre_cmnd, gv_clientname, get_stopic_ix(1)), callback_mqtt_led01);
+//  add_subtopic(mqtt_GetTopic_P(gv_stopic_led02, mqtt_pre_cmnd, gv_clientname, get_stopic_ix(2)), callback_mqtt_led02);
+//  add_subtopic(mqtt_GetTopic_P(gv_stopic_led03, mqtt_pre_cmnd, gv_clientname, get_stopic_ix(3)), callback_mqtt_led03);
+//  add_subtopic(mqtt_GetTopic_P(gv_stopic_led04, mqtt_pre_cmnd, gv_clientname, get_stopic_ix(4)), callback_mqtt_led04);
+//  add_subtopic(mqtt_GetTopic_P(gv_stopic_led05, mqtt_pre_cmnd, gv_clientname, get_stopic_ix(5)), callback_mqtt_led05);
+//  add_subtopic(mqtt_GetTopic_P(gv_stopic_led06, mqtt_pre_cmnd, gv_clientname, get_stopic_ix(6)), callback_mqtt_led06);
+//  add_subtopic(mqtt_GetTopic_P(gv_stopic_led07, mqtt_pre_cmnd, gv_clientname, get_stopic_ix(7)), callback_mqtt_led07);
+//  add_subtopic(mqtt_GetTopic_P(gv_stopic_led08, mqtt_pre_cmnd, gv_clientname, get_stopic_ix(8)), callback_mqtt_led08);
+//  add_subtopic(mqtt_GetTopic_P(gv_stopic_led09, mqtt_pre_cmnd, gv_clientname, get_stopic_ix(9)), callback_mqtt_led09);
+//  add_subtopic(mqtt_GetTopic_P(gv_stopic_led10, mqtt_pre_cmnd, gv_clientname, get_stopic_ix(10)), callback_mqtt_led10);
+//  add_subtopic(mqtt_GetTopic_P(gv_stopic_led11, mqtt_pre_cmnd, gv_clientname, get_stopic_ix(11)), callback_mqtt_led11);
+//  add_subtopic(mqtt_GetTopic_P(gv_stopic_led12, mqtt_pre_cmnd, gv_clientname, get_stopic_ix(12)), callback_mqtt_led12);
+//  add_subtopic(mqtt_GetTopic_P(gv_stopic_led13, mqtt_pre_cmnd, gv_clientname, get_stopic_ix(13)), callback_mqtt_led13);
+//  add_subtopic(mqtt_GetTopic_P(gv_stopic_led14, mqtt_pre_cmnd, gv_clientname, get_stopic_ix(14)), callback_mqtt_led14);
 
+  add_subtopic(mqtt_subtopic_timestamp, callback_mqtt_time);
 
-  add_subtopic(mqtt_GetTopic_P(gv_stopic_leds, mqtt_pre_cmnd, gv_clientname, get_stopic_ix(0)), callback_mqtt_leds);
-  add_subtopic(mqtt_GetTopic_P(gv_stopic_led01, mqtt_pre_cmnd, gv_clientname, get_stopic_ix(1)), callback_mqtt_led01);
-  add_subtopic(mqtt_GetTopic_P(gv_stopic_led02, mqtt_pre_cmnd, gv_clientname, get_stopic_ix(2)), callback_mqtt_led02);
-  add_subtopic(mqtt_GetTopic_P(gv_stopic_led03, mqtt_pre_cmnd, gv_clientname, get_stopic_ix(3)), callback_mqtt_led03);
-  add_subtopic(mqtt_GetTopic_P(gv_stopic_led04, mqtt_pre_cmnd, gv_clientname, get_stopic_ix(4)), callback_mqtt_led04);
-  add_subtopic(mqtt_GetTopic_P(gv_stopic_led05, mqtt_pre_cmnd, gv_clientname, get_stopic_ix(5)), callback_mqtt_led05);
-  add_subtopic(mqtt_GetTopic_P(gv_stopic_led06, mqtt_pre_cmnd, gv_clientname, get_stopic_ix(6)), callback_mqtt_led06);
-  add_subtopic(mqtt_GetTopic_P(gv_stopic_led07, mqtt_pre_cmnd, gv_clientname, get_stopic_ix(7)), callback_mqtt_led07);
-  add_subtopic(mqtt_GetTopic_P(gv_stopic_led08, mqtt_pre_cmnd, gv_clientname, get_stopic_ix(8)), callback_mqtt_led08);
-  add_subtopic(mqtt_GetTopic_P(gv_stopic_led09, mqtt_pre_cmnd, gv_clientname, get_stopic_ix(9)), callback_mqtt_led09);
-  add_subtopic(mqtt_GetTopic_P(gv_stopic_led10, mqtt_pre_cmnd, gv_clientname, get_stopic_ix(10)), callback_mqtt_led10);
-  add_subtopic(mqtt_GetTopic_P(gv_stopic_led11, mqtt_pre_cmnd, gv_clientname, get_stopic_ix(11)), callback_mqtt_led11);
-  add_subtopic(mqtt_GetTopic_P(gv_stopic_led12, mqtt_pre_cmnd, gv_clientname, get_stopic_ix(12)), callback_mqtt_led12);
-  add_subtopic(mqtt_GetTopic_P(gv_stopic_led13, mqtt_pre_cmnd, gv_clientname, get_stopic_ix(13)), callback_mqtt_led13);
-  add_subtopic(mqtt_GetTopic_P(gv_stopic_led14, mqtt_pre_cmnd, gv_clientname, get_stopic_ix(14)), callback_mqtt_led14);
   init_mqtt(gv_clientname);
+
   gv_mqtt_pub_stat = true;
 
 }
@@ -171,4 +182,24 @@ void callback_mqtt_led13(char* topic, byte * payload, unsigned int length) {
 }
 void callback_mqtt_led14(char* topic, byte * payload, unsigned int length) {
   callback_mqtt_led_ix(topic, payload, length, 14);
+}
+
+time_t payload_to_time_t( byte* payload, unsigned int length) {
+  time_t lv_time_t = 0;
+
+  for (int i = 0; i < length; i++) {
+    DebugPrint((char)payload[i]);
+  }
+  DebugPrintln(" <- payload");
+
+  for (int i = 0; i < length; i++) {
+
+    lv_time_t = (lv_time_t * 10) + payload[i] - 48;
+
+  }
+
+  DebugPrint(lv_time_t);
+  DebugPrintln(" <- timestamp");
+
+  return lv_time_t;
 }

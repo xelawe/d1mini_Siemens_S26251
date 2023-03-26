@@ -1,8 +1,8 @@
 //
 void setup()
-{ 
+{
   init_ser();
-  
+
   Wire.begin(/*SDA*/D2,/*SCL*/D1); //(D1mini)
   init_sx1509();
 
@@ -17,6 +17,8 @@ void setup()
   Serial.println( WiFi.localIP() );
 
   init_ota_local();
+  
+  init_time();
 
   init_mqtt_local();
 
@@ -43,7 +45,10 @@ void loop()
     gv_reset = false;
   }
 
-  gv_disp_val = gv_counter;
+  //gv_disp_val = gv_counter;
+
+  gv_disp_val = minute(gv_timestamp_mqtt_local);
+
   disp();
   //disp_hex(i);
 
