@@ -17,7 +17,7 @@ void setup()
   Serial.println( WiFi.localIP() );
 
   init_ota_local();
-  
+
   init_time();
 
   init_mqtt_local();
@@ -48,6 +48,7 @@ void loop()
   //gv_disp_val = gv_counter;
 
   gv_disp_val = minute(gv_timestamp_mqtt_local);
+
 
   disp();
   //disp_hex(i);

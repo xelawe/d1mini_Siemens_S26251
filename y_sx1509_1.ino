@@ -51,11 +51,6 @@ void disp_led( ) {
 
 void time_to_led() {
 
-  //time_t lv_now_utc = gv_timestamp_mqtt;
-  //    time_t lv_now =  gv_timestamp_mqtt_local;
-  //
-  //
-  //    disp_str = String(hour(lv_now)) + ":" + twoDigits(minute(gv_timestamp_mqtt_local))
   int lv_hour = hour(gv_timestamp_mqtt_local);
   if (lv_hour > 12 ) {
     lv_hour = lv_hour - 12;
@@ -63,7 +58,8 @@ void time_to_led() {
   if (lv_hour == 0 ) {
     lv_hour = 12;
   }
-  lv_hour = lv_hour + 1;
+
+  lv_hour++;
 
   for (int i = 2; i < anz_leds; i++) {
     if (i == lv_hour) {

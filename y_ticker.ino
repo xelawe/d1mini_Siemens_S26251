@@ -16,10 +16,10 @@ void check_ticker_count() {
     return;
   }
 
-  if (gv_counter < 59) {
+  if (gv_counter < 12) {
     gv_counter++;
   } else {
-    gv_counter = 0;
+    gv_counter = 1;
   }
 
   gv_ticked1 = false;
